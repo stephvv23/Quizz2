@@ -14,56 +14,54 @@ import org.json.simple.parser.ParseException;
 
 /**
  *
- * @author Usuario
- * /Esta clase solo nos va a servir para leer y escribir
+ * @author Usuario /Esta clase solo nos va a servir para leer y escribir
  */
 public class JSONFile {
+
     private String fileName;
-    private JSONObject jsonObject;
     private JSONArray jsonArray;
-    private JSONParser parser;
-    
-    //le pasamos cualquier archivo y va a trabajar con ese, asi que es reutilizable
-    public JSONFile(String fileName){
-        
+    private JSONObject jsonObject;
+    private JSONParser jsonParser;
+
+    public JSONFile(String fileName) {
         this.fileName = fileName;
-        this.jsonObject = new JSONObject();
         this.jsonArray = new JSONArray();
+        this.jsonObject = new JSONObject();
     }
-    
-    //leer cualquier JSON
-    public JSONArray read(){ //devuelve un JSONArray ya listo
-        this.parser = new JSONParser();
-        try(FileReader reader = new FileReader(fileName)){
-            Object obj = this.parser.parse(reader);
+
+    public JSONArray read() {
+        this.jsonParser = new JSONParser();
+
+        try (FileReader reader = new FileReader(fileName)) {
+            Object obj = this.jsonParser.parse(reader);
             this.jsonArray = (JSONArray) obj;
-        }catch(IOException | ParseException e){
-            System.err.println("No existing file or new file will be create.");
+        } catch (IOException | ParseException e) {
+            System.out.print("kk");
         }
         return this.jsonArray;
     }
-    
-    //para escribir objeto por objeto
-    public void  writer(JSONObject jsonObject){
-        this.jsonArray = this.read(); //leer el archivo y cargarlo
-        this.jsonArray.add(jsonObject); //se añade, no importa que trae el objeto  
-        try(FileWriter fileWriter = new FileWriter(fileName)){
-            fileWriter.write(this.jsonArray.toJSONString());
-            fileWriter.flush();
-            fileWriter.close();
-        }catch(IOException e){
-            
+
+    public void writer(JSONObject jsonObjet) {
+        this.jsonArray = this.read();
+        this.jsonArray.add(jsonObjet);
+        try (FileWriter writer = new FileWriter(fileName)) {
+            writer.write(this.jsonArray.toJSONString());
+            writer.flush();
+            writer.close();
+        } catch (IOException e) {
+            System.out.print("kk");
+
         }
     }
-    
-    //para escribir un JSONArray
+
     public void writerArray(JSONArray jsonArray) {
-        try (FileWriter fileWriter = new FileWriter(fileName)) {
-            fileWriter.write(this.jsonArray.toJSONString());
-            fileWriter.flush();
-            fileWriter.close();
+        try (FileWriter writer = new FileWriter(fileName)) {
+            writer.write(jsonArray.toJSONString());
+            writer.flush();
+            writer.close();
         } catch (IOException e) {
-            System.err.println("No posible read.");
+            System.out.print("kk");
+
         }
     }
 }

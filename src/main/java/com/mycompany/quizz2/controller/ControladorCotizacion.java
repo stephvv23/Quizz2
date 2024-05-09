@@ -98,7 +98,7 @@ public class ControladorCotizacion implements ActionListener, MouseListener {
                 cotizacionDelete.setPrecioTotal(arrayPaquete.getPrecioTotal());
 
                 if (validarCotizacion(cotizacionDelete)) {
-                    GUIPaqueteTuristico.enviarMensaje(arrayCotizacion.delete(cotizacionDelete));
+                    GUIPaqueteTuristico.enviarMensaje(arrayCotizacion.delete(cotizacionDelete.getCodigo()));
 
                     this.limpiarGUI();
 

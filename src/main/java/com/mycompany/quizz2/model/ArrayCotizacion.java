@@ -107,8 +107,8 @@ public class ArrayCotizacion {
         return "Error añadiendo cotizacion";
     }//fin metodo
 
-    public String delete(Cotizacion cotizacionDelete) {
-        if (this.search(cotizacionDelete.getCodigo()) != null) {
+    public String delete(int codigo) {
+        if (this.search(codigo) != null) {
 
             JSONFile jsonFile = new JSONFile("cotizaciones.json");
             JSONArray jsonArrayNew = jsonFile.read();// Lee el contenido actual del archivo
@@ -118,7 +118,7 @@ public class ArrayCotizacion {
                 //busca el objeto en el array y lo elimina
                 JSONObject objectJson = (JSONObject) object;
 
-                if (String.valueOf(objectJson.get("codigo")).equals(Integer.toString(cotizacionDelete.getCodigo()))) {
+                if (String.valueOf(objectJson.get("codigo")).equals(Integer.toString(codigo))) {
                     jsonArrayNew.remove(objectJson);
                     this.listaCotizaciones.remove(index);
 

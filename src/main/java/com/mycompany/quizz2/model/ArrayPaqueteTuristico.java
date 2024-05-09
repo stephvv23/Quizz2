@@ -4,9 +4,18 @@
  */
 package com.mycompany.quizz2.model;
 
-import static com.mycompany.quizz2.model.CSVHandler.escribirCSV;
-import static com.mycompany.quizz2.model.CSVHandler.leerCSV;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
+import com.opencsv.bean.CsvToBean;
+import com.opencsv.bean.CsvToBeanBuilder;
+import com.opencsv.bean.StatefulBeanToCsv;
+import com.opencsv.bean.StatefulBeanToCsvBuilder;
+import com.opencsv.exceptions.CsvDataTypeMismatchException;
+import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import org.json.simple.JSONArray;
@@ -188,8 +197,42 @@ public class ArrayPaqueteTuristico {
     }
 
     //Metodo para limpiar el array
-
     public void limpiarListaSeleccionados() {
         this.listaPaquetesSeleccionados = new ArrayList<>();
     }
+
+    public static ArrayList<PaqueteTuristico> leerCSV(String rutaArchivo) throws IOException {
+
+        try (CSVReader reader = new CSVReader(new FileReader(rutaArchivo))) {
+            // Configurar el lector CSV
+            CsvToBean<PaqueteTuristico> csvToBean = new CsvToBeanBuilder<PaqueteTuristico>(reader)
+                    .withType(PaqueteTuristico.class)
+                    .build();
+
+            // Leer las personas del archivo CSV
+            return (ArrayList<PaqueteTuristico>) csvToBean.parse();
+        } catch (FileNotFoundException e) {
+            System.err.println("Error: El archivo " + rutaArchivo + " no existe.");
+            FileReader fileReader = new FileReader(rutaArchivo);
+            return new ArrayList<>();  // Devuelve una lista vacía
+        }
+    }
+
+    // Método para escribir una lista de objetos Person en un archivo CSV
+    public static void escribirCSV(ArrayList<PaqueteTuristico> personas, String rutaArchivo) throws IOException {
+        try (CSVWriter writer = new CSVWriter(new FileWriter(rutaArchivo))) {
+            // Configurar el escritor CSV
+            StatefulBeanToCsv<PaqueteTuristico> beanToCsv = new StatefulBeanToCsvBuilder<PaqueteTuristico>(writer).build();
+
+            try {
+                // Escribir la lista de personas en el archivo CSV
+                beanToCsv.write(personas);
+            } catch (CsvDataTypeMismatchException ex) {
+
+            } catch (CsvRequiredFieldEmptyException ex) {
+
+            }
+        }
+    }
+
 }
